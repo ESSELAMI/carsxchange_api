@@ -14,6 +14,7 @@ class AuthController extends Controller
     /*
 	 * Register new user
 	*/
+    
     public function register(Request $request)
     {
         $validatedData = $request->validate([
