@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CarStoreRequest extends FormRequest
 {
@@ -30,6 +31,10 @@ class CarStoreRequest extends FormRequest
             'year' => 'required',
             'picture' => 'required',
             'mileage' => 'required',
+            'user_id' => 'required|exists:users,id'
+
+
         ];
     }
+  
 }
