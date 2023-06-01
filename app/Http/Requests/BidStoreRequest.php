@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Car;
+use GuzzleHttp\Psr7\Response;
+use Illuminate\Auth\Access\Response as AccessResponse;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
@@ -10,9 +13,9 @@ class BidStoreRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(): AccessResponse
     {
-        return Gate::allows('create', [Bid::class, $this->input('car_id')]);
+        return Gate::inspect('create', [Bid::class, $this->route('car')]);
     }
 
     /**
@@ -22,10 +25,9 @@ class BidStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+      
         return [
             'price' => 'required|numeric',
-            'user_id' => 'required|exists:users,id',
-            'car_id' => 'required|exists:cars,id',
         ];
     }
 }

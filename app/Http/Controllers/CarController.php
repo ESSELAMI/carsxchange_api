@@ -26,7 +26,6 @@ class CarController extends Controller
         $validatedData = $request->validated();
         $car = Car::create(array_merge($validatedData, ['user_id' => $userId]));
 
-        // $car = Car::create($validatedData);
 
         return response()->json($car, 201);
     }
