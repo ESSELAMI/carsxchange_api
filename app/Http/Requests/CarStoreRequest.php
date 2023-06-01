@@ -31,9 +31,6 @@ class CarStoreRequest extends FormRequest
             'year' => 'required',
             'picture' => 'required',
             'mileage' => 'required',
-            'user_id' => 'required|exists:users,id'
-
-
         ];
     }
   

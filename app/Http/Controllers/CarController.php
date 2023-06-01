@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CarStoreRequest;
 use App\Models\Car;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class CarController extends Controller
@@ -18,9 +19,14 @@ class CarController extends Controller
 
     public function store(CarStoreRequest $request)
     {
-        $validatedData = $request->validated();
+        // Retrieve the authenticated user's ID
+        $userId = Auth::id();
 
-        $car = Car::create($validatedData);
+        // Create the car with the user ID
+        $validatedData = $request->validated();
+        $car = Car::create(array_merge($validatedData, ['user_id' => $userId]));
+
+        // $car = Car::create($validatedData);
 
         return response()->json($car, 201);
     }
