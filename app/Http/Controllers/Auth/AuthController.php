@@ -14,7 +14,7 @@ class AuthController extends Controller
     /*
 	 * Register new user
 	*/
-    
+
     public function register(Request $request)
     {
         $validatedData = $request->validate([
@@ -24,9 +24,12 @@ class AuthController extends Controller
         ]);
 
         $validatedData['password'] = Hash::make($validatedData['password']);
+        $user = User::create($validatedData);
 
-        if (User::create($validatedData)) {
-            return response()->json(null, 201);
+        if ($user) {
+
+            $access_token = $user->createToken($request->email)->plainTextToken;
+            return response(compact('user', 'access_token'), 200);
         } else
 
             return response()->json(null, 404);
@@ -50,9 +53,18 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json([
-            'user' => $user,
-            'access_token' => $user->createToken($request->email)->plainTextToken
-        ], 200);
+        $access_token = $user->createToken($request->email)->plainTextToken;
+        return response(compact('user', 'access_token'), 200);
+    }
+
+    /*
+	 * Logout user and delete his access_token
+	*/
+    public function logout(Request $request)
+    {
+
+        $user = $request->user();
+        $user->currentAccessToken()->delete;
+        return response('', 204);
     }
 }
